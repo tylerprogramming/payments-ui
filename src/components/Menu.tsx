@@ -1,14 +1,12 @@
-import New from "./New"
-import Search from "./Search"
+
 
 const Menu = () : JSX.Element => {
     return (
-        <div>
-            <h1>Payments</h1>
-            <Search />
-            <New />
-        </div>
-    )
+        <ul className="nav">
+            <li>Find a transaction</li>
+            <li>New transaction</li>
+        </ul>
+    );
 }
 
-export default Menu
+export default Menu;
