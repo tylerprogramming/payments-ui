@@ -1,24 +1,54 @@
-import './Transactions.css';
+import { useState } from "react";
+import { getAllPayments } from "../data/DataFunctions";
+import "./Transactions.css";
 
 const Transactions = () => {
-    return (
-      <table className="transactionsTable">
-          <thead>
-                <tr><th>Id</th><th>Date</th><th>Country</th><th>Currency</th><th>Amount</th></tr>
-          </thead>
-          <tbody>
-	          <tr>
-	              <td>1</td><td>2020-05-22</td><td>USA</td><td>USD</td><td>17.55</td>
-	          </tr>
-	          <tr>
-	              <td>2</td><td>2020-05-23</td><td>UK</td><td>GBP</td><td>36.50</td>
-	          </tr>
-	          <tr>
-	              <td>3</td><td>2020-05-24</td><td>SWE</td><td>EUR</td><td>42.00</td>
-	          </tr>
-          </tbody>
-      </table>
-    );
-}
+  const allPayments = getAllPayments();
 
-export default Transactions
+  const countries : string[] = allPayments.map(payment => payment.country)
+  const uniqueCountries : string[] = Array.from(new Set(countries))
+
+  const [myValue, setMyValue] = useState(uniqueCountries[0]);
+
+  return (
+    <div>
+      <select
+        onChange={(e) => setMyValue(e.target.value)}
+        defaultValue={myValue}
+      >
+        {uniqueCountries.map((option, idx) => (
+          <option key={idx}>{option}</option>
+        ))}
+      </select>
+
+      <table className="transactionsTable">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Country</th>
+            <th>Currency</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allPayments
+            .filter((payment) => payment.country === myValue)
+            .map((payment) => {
+              return (
+                <tr>
+                  <td>{payment.id}</td>
+                  <td>{payment.date}</td>
+                  <td>{payment.country}</td>
+                  <td>{payment.currency}</td>
+                  <td>{payment.amount}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default Transactions;
